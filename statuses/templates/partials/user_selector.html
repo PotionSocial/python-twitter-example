@@ -1,0 +1,7 @@
+<div class="user-selection">
+        Select the current user :  
+        <form action="{% url "select_current_user" %}" method="post" id="user_selector_form">
+            {% csrf_token %}
+            {{ user_selector_form }}
+        </form>
+</div>

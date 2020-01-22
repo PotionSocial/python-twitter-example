@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load static %}
+{% block page_content %}
+
+<div class="row">
+    <div class="col-md-6 gedf-main offset-md-3">
+        <!--- \\\\\\\Post-->
+        <div class="card gedf-card">
+
+            <form action="{% url "create_status" %}" method="post">
+                <div class="card-body">
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label class="sr-only" for="message">{{ status_form.message.label_tag }}</label>
+                                {{ status_form.message.errors }}
+                                {{ status_form.message }}
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="btn-toolbar justify-content-between">
+                        <div class="btn-group">
+                            <button type="submit" class="btn btn-primary">Tweet</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <!-- Post /////-->
+
+        {% for status in statuses %}
+        <!--- \\\\\\\Post-->
+        <div class="card gedf-card">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="mr-2">
+                            <img class="rounded-circle" width="45" src="https://picsum.photos/id/{{forloop.counter}}/50/50" alt="">
+                        </div>
+                        <div class="ml-2">
+                            <div class="h5 m-0">{{ status.owner.name }}</div>
+                            <div class="h7 text-muted"><i class="fa fa-clock-o"></i> {{ status.created_at }}</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="dropdown">
+                            <button class="btn btn-link dropdown-toggle" type="button" id="gedf-drop1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-ellipsis-h"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="gedf-drop1">
+                                <a class="dropdown-item" href="{% url 'delete_status' status.id %}">Delete</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="card-body">
+                <p class="card-text">
+                    {{ status.message }}
+                </p>
+            </div>
+            <div class="card-footer">
+                {% if status.is_recommended %}
+                    <a href="{% url 'unlike_status' status.id %}" class="card-link"><i class="fa fa-heart text-danger"></i> Unlike</a>
+                {% else %}
+                    <a href="{% url 'like_status' status.id %}" class="card-link"><i class="fa fa-heart-o text-secondary"></i> Like</a>
+                {% endif %}
+            </div>
+        </div>
+        <!-- Post /////-->
+        {% endfor %}
+
+    </div>
+</div>
+
+
+{% endblock %}
